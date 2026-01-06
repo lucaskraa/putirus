@@ -1,22 +1,18 @@
-
+```javascript
 // XP System
 let xp = parseInt(localStorage.getItem('xp')) || 0;
 let level = parseInt(localStorage.getItem('level')) || 1;
-
 // Hearts System
 let hearts = parseInt(localStorage.getItem('hearts')) || 5;
 const maxHearts = 5;
 let lastHeartRefillTime = parseInt(localStorage.getItem('lastHeartRefillTime')) || Date.now();
-
 // Streak System
 let streak = parseInt(localStorage.getItem('streak')) || 0;
 let lastLoginDate = localStorage.getItem('lastLoginDate') || new Date().toDateString();
-
 // Daily Goal
 const dailyGoalXP = 50;
 let dailyXP = parseInt(localStorage.getItem('dailyXP')) || 0;
 let dailyGoalAchieved = localStorage.getItem('dailyGoalDate') === new Date().toDateString();
-
 document.addEventListener('DOMContentLoaded', () => {
     checkStreak();
     refillHearts(); // Check and refill on load
@@ -26,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDailyGoal();
     setInterval(refillHearts, 60000); // Check every minute
 });
-
 function checkStreak() {
     const today = new Date().toDateString();
     if (lastLoginDate !== today) {
@@ -43,11 +38,9 @@ function checkStreak() {
         resetDailyGoal();
     }
 }
-
 function updateStreak() {
     document.getElementById('streak').innerText = `Streak: ${streak} dias`;
 }
-
 function resetDailyGoal() {
     dailyXP = 0;
     dailyGoalAchieved = false;
@@ -55,7 +48,6 @@ function resetDailyGoal() {
     localStorage.setItem('dailyGoalDate', new Date().toDateString());
     updateDailyGoal();
 }
-
 function updateDailyGoal() {
     const dailyGoalDiv = document.getElementById('daily-goal');
     if (dailyGoalDiv) {
@@ -65,7 +57,6 @@ function updateDailyGoal() {
         }
     }
 }
-
 function updateProgress() {
     document.getElementById('xp').innerText = xp;
     document.getElementById('level').innerText = level;
@@ -74,7 +65,6 @@ function updateProgress() {
     localStorage.setItem('xp', xp);
     localStorage.setItem('level', level);
 }
-
 function addXP(amount) {
     xp += amount;
     dailyXP += amount;
@@ -92,12 +82,13 @@ function addXP(amount) {
     updateDailyGoal();
     updateLeaderboard();
 }
-
 function updateHearts() {
-    document.getElementById('hearts').innerText = '❤️'.repeat(hearts) + '♡'.repeat(maxHearts - hearts);
+    const heartsElement = document.getElementById('hearts');
+    if (heartsElement) {
+        heartsElement.innerText = '❤️'.repeat(hearts) + '♡'.repeat(maxHearts - hearts);
+    }
     localStorage.setItem('hearts', hearts);
 }
-
 function loseHeart() {
     if (hearts > 0) {
         hearts--;
@@ -110,7 +101,6 @@ function loseHeart() {
         return false;
     }
 }
-
 function refillHearts() {
     const now = Date.now();
     const timeDiff = Math.floor((now - lastHeartRefillTime) / (1000 * 60 * 30)); // 30 min per heart
@@ -121,7 +111,6 @@ function refillHearts() {
         updateHearts();
     }
 }
-
 // Navigation
 function showSection(sectionId) {
     document.querySelectorAll('main section').forEach(section => {
@@ -129,8 +118,10 @@ function showSection(sectionId) {
         section.classList.remove('active');
     });
     const targetSection = document.getElementById(sectionId);
-    targetSection.classList.remove('hidden');
-    targetSection.classList.add('active');
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+        targetSection.classList.add('active');
+    }
     // Init section-specific content
     if (sectionId === 'vocabulary') loadVocabularyCards();
     if (sectionId === 'grammar') grammarQuiz();
@@ -138,7 +129,6 @@ function showSection(sectionId) {
     if (sectionId === 'conversation') conversationExercise();
     if (sectionId === 'lessons') { startQuiz(); startGame(); startMatchingGame(); }
 }
-
 // Expanded Vocabulary - 100 words from reliable source
 const vocabulary = [
     { russian: 'я', portuguese: 'eu', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D1%8F&tl=ru' },
@@ -266,30 +256,30 @@ const vocabulary = [
     { russian: 'Аэропорт', portuguese: 'Aeroporto', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D0%90%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82&tl=ru' },
     { russian: 'Поезд', portuguese: 'Trem', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D0%9F%D0%BE%D0%B5%D0%B7%D0%B4&tl=ru' },
 ];
-
 function loadVocabularyCards() {
     const container = document.querySelector('#vocabulary .card-container');
-    container.innerHTML = '';
-    vocabulary.forEach(item => {
-        const card = document.createElement('div');
-        card.classList.add('flashcard');
-        card.innerHTML = `
-            <div class="flashcard-inner">
-                <div class="flashcard-front">${item.russian}</div>
-                <div class="flashcard-back">${item.portuguese}</div>
-            </div>
-            <button onclick="playAudio('${item.audio}')">Ouvir</button>
-        `;
-        card.addEventListener('click', () => card.classList.toggle('flipped'));
-        container.appendChild(card);
-    });
+    if (container) {
+        container.innerHTML = '';
+        vocabulary.forEach(item => {
+            const card = document.createElement('div');
+            card.classList.add('flashcard');
+            card.innerHTML = `
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">${item.russian}</div>
+                    <div class="flashcard-back">${item.portuguese}</div>
+                </div>
+                <button class="audio-button" onclick="playAudio('${item.audio}')">Ouvir</button>
+            `;
+            card.addEventListener('click', () => card.classList.toggle('flipped'));
+            card.addEventListener('touchend', () => card.classList.toggle('flipped')); // Suporte mobile
+            container.appendChild(card);
+        });
+    }
 }
-
 function playAudio(url) {
     const audio = new Audio(url);
     audio.play().catch(error => console.error('Audio play error:', error));
 }
-
 // Expanded Grammar Quiz - 30 questions based on beginner rules
 const grammarQuestions = [
     { question: 'Qual é o caso usado para sujeitos?', options: ['Nominativo', 'Genitivo', 'Dativo', 'Acusativo'], correct: 0 },
@@ -323,32 +313,34 @@ const grammarQuestions = [
     { question: 'Adjetivo concorda em?', options: ['Gênero, número, caso', 'Apenas gênero', 'Apenas número', 'Apenas caso'], correct: 0 },
     { question: 'Conjunção para "ou"?', options: ['И', 'Но', 'Или', 'Потому что'], correct: 2 },
     { question: 'Advérbio para "bem"?', options: ['Хорошо', 'Плохо', 'Быстро', 'Здесь'], correct: 0 },
-    { russian: 'Аэропорт', portuguese: 'Aeroporto', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D0%90%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82&tl=ru' },
-    { russian: 'Поезд', portuguese: 'Trem', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D0%9F%D0%BE%D0%B5%D0%B7%D0%B4&tl=ru' },
 ];
-
 let currentGrammarQuestion = 0;
-
 function grammarQuiz() {
     if (hearts === 0) {
-        document.getElementById('grammar-quiz').innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        const grammarQuizDiv = document.getElementById('grammar-quiz');
+        if (grammarQuizDiv) {
+            grammarQuizDiv.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        }
         return;
     }
     const quizDiv = document.getElementById('grammar-quiz');
-    quizDiv.innerHTML = '';
-    if (currentGrammarQuestion < grammarQuestions.length) {
-        const q = grammarQuestions[currentGrammarQuestion];
-        quizDiv.innerHTML = `
-            <p>${q.question}</p>
-            ${q.options.map((opt, idx) => `<button class="quiz-button" onclick="checkGrammarAnswer(${idx})">${opt}</button>`).join('')}
-        `;
-    } else {
-        quizDiv.innerHTML = '<p>Quiz completado! +50 XP</p>';
-        addXP(50);
-        currentGrammarQuestion = 0;
+    if (quizDiv) {
+        quizDiv.innerHTML = '';
+        if (currentGrammarQuestion < grammarQuestions.length) {
+            const q = grammarQuestions[currentGrammarQuestion];
+            quizDiv.innerHTML = `
+                <p class="quiz-question">${q.question}</p>
+                <div class="quiz-options">
+                    ${q.options.map((opt, idx) => `<button class="quiz-button" onclick="checkGrammarAnswer(${idx})">${opt}</button>`).join('')}
+                </div>
+            `;
+        } else {
+            quizDiv.innerHTML = '<p>Quiz completado! +50 XP</p>';
+            addXP(50);
+            currentGrammarQuestion = 0;
+        }
     }
 }
-
 function checkGrammarAnswer(selected) {
     const q = grammarQuestions[currentGrammarQuestion];
     if (selected === q.correct) {
@@ -361,7 +353,6 @@ function checkGrammarAnswer(selected) {
     currentGrammarQuestion++;
     grammarQuiz();
 }
-
 // Expanded Conversation Exercise - 20+ from daily phrases
 const conversationExercises = [
     { prompt: 'Como se diz "Olá, como vai?"', answer: 'Привет, как дела?' },
@@ -387,44 +378,48 @@ const conversationExercises = [
     { prompt: 'Diga "Tem cuidado"', answer: 'Береги себя' },
     { prompt: 'Diga "Não te preocupes"', answer: 'Не переживай' },
 ];
-
 let currentConversationExercise = 0;
-
 function conversationExercise() {
     if (hearts === 0) {
-        document.getElementById('conversation-exercise').innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        const conversationExerciseDiv = document.getElementById('conversation-exercise');
+        if (conversationExerciseDiv) {
+            conversationExerciseDiv.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        }
         return;
     }
     const exerciseDiv = document.getElementById('conversation-exercise');
-    exerciseDiv.innerHTML = '';
-    if (currentConversationExercise < conversationExercises.length) {
-        const ex = conversationExercises[currentConversationExercise];
-        exerciseDiv.innerHTML = `
-            <p>${ex.prompt}</p>
-            <input type="text" id="conv-input">
-            <button onclick="checkConversationAnswer()">Verificar</button>
-        `;
-    } else {
-        exerciseDiv.innerHTML = '<p>Exercício completado! +50 XP</p>';
-        addXP(50);
-        currentConversationExercise = 0;
+    if (exerciseDiv) {
+        exerciseDiv.innerHTML = '';
+        if (currentConversationExercise < conversationExercises.length) {
+            const ex = conversationExercises[currentConversationExercise];
+            exerciseDiv.innerHTML = `
+                <p class="quiz-question">${ex.prompt}</p>
+                <input type="text" id="conv-input" class="quiz-input">
+                <button class="quiz-button" onclick="checkConversationAnswer()">Verificar</button>
+            `;
+        } else {
+            exerciseDiv.innerHTML = '<p>Exercício completado! +50 XP</p>';
+            addXP(50);
+            currentConversationExercise = 0;
+        }
     }
 }
-
 function checkConversationAnswer() {
     const ex = conversationExercises[currentConversationExercise];
-    const input = document.getElementById('conv-input').value.trim().toLowerCase();
-    if (input === ex.answer.toLowerCase()) {
-        alert('Correto!');
-        addXP(10);
-    } else {
-        alert('Errado! A resposta correta é ' + ex.answer);
-        loseHeart();
+    const inputElement = document.getElementById('conv-input');
+    if (inputElement) {
+        const input = inputElement.value.trim().toLowerCase();
+        if (input === ex.answer.toLowerCase()) {
+            alert('Correto!');
+            addXP(10);
+        } else {
+            alert('Errado! A resposta correta é ' + ex.answer);
+            loseHeart();
+        }
     }
     currentConversationExercise++;
     conversationExercise();
 }
-
 // Expanded Lessons Quiz - 30 questions based on vocabulary translations
 const lessonsQuestions = [
     { question: 'Tradução de "Olá"?', options: ['Пока', 'Привет', 'Спасибо', 'Да'], correct: 1 },
@@ -458,29 +453,33 @@ const lessonsQuestions = [
     { question: 'Qual é "tudo" em russo?', options: ['или', 'всё', 'и', 'знать'], correct: 1 },
     { question: 'Tradução de "ou"?', options: ['и', 'или', 'знать', 'Я знаю'], correct: 1 },
 ];
-
 let currentLessonQuestion = 0;
-
 function startQuiz() {
     if (hearts === 0) {
-        document.getElementById('quiz-container').innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        const quizContainerDiv = document.getElementById('quiz-container');
+        if (quizContainerDiv) {
+            quizContainerDiv.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        }
         return;
     }
     const quizContainer = document.getElementById('quiz-container');
-    quizContainer.innerHTML = '';
-    if (currentLessonQuestion < lessonsQuestions.length) {
-        const q = lessonsQuestions[currentLessonQuestion];
-        quizContainer.innerHTML = `
-            <p>${q.question}</p>
-            ${q.options.map((opt, idx) => `<button class="quiz-button" onclick="checkLessonAnswer(${idx})">${opt}</button>`).join('')}
-        `;
-    } else {
-        quizContainer.innerHTML = '<p>Quiz completado! +50 XP</p>';
-        addXP(50);
-        currentLessonQuestion = 0;
+    if (quizContainer) {
+        quizContainer.innerHTML = '';
+        if (currentLessonQuestion < lessonsQuestions.length) {
+            const q = lessonsQuestions[currentLessonQuestion];
+            quizContainer.innerHTML = `
+                <p class="quiz-question">${q.question}</p>
+                <div class="quiz-options">
+                    ${q.options.map((opt, idx) => `<button class="quiz-button" onclick="checkLessonAnswer(${idx})">${opt}</button>`).join('')}
+                </div>
+            `;
+        } else {
+            quizContainer.innerHTML = '<p>Quiz completado! +50 XP</p>';
+            addXP(50);
+            currentLessonQuestion = 0;
+        }
     }
 }
-
 function checkLessonAnswer(selected) {
     const q = lessonsQuestions[currentLessonQuestion];
     if (selected === q.correct) {
@@ -493,56 +492,60 @@ function checkLessonAnswer(selected) {
     currentLessonQuestion++;
     startQuiz();
 }
-
 // Improved Memory Game
 let memoryDifficulty = 'medium';
-
 function startGame() {
     if (hearts === 0) {
-        document.getElementById('game-container').innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        const gameContainerDiv = document.getElementById('game-container');
+        if (gameContainerDiv) {
+            gameContainerDiv.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        }
         return;
     }
     const gameContainer = document.getElementById('game-container');
-    gameContainer.innerHTML = '';
-    let pairCount;
-    switch (memoryDifficulty) {
-        case 'easy': pairCount = 10; break;
-        case 'medium': pairCount = 20; break;
-        case 'hard': pairCount = 30; break;
+    if (gameContainer) {
+        gameContainer.innerHTML = '';
+        let pairCount;
+        switch (memoryDifficulty) {
+            case 'easy': pairCount = 10; break;
+            case 'medium': pairCount = 20; break;
+            case 'hard': pairCount = 30; break;
+        }
+        const memoryPairs = vocabulary.slice(0, pairCount).map(item => ({
+            russian: item.russian,
+            portuguese: item.portuguese
+        }));
+        let cards = [];
+        memoryPairs.forEach((pair, index) => {
+            cards.push({ value: pair.russian, pairId: index, type: 'russian' });
+            cards.push({ value: pair.portuguese, pairId: index, type: 'portuguese' });
+        });
+        cards = cards.sort(() => Math.random() - 0.5);
+        cards.forEach((item) => {
+            const card = document.createElement('div');
+            card.classList.add('memory-card');
+            card.dataset.pairId = item.pairId;
+            card.dataset.value = item.value;
+            card.innerText = '?';
+            card.addEventListener('click', flipCard);
+            card.addEventListener('touchend', flipCard); // Suporte mobile
+            gameContainer.appendChild(card);
+        });
     }
-    const memoryPairs = vocabulary.slice(0, pairCount).map(item => ({
-        russian: item.russian,
-        portuguese: item.portuguese
-    }));
-    let cards = [];
-    memoryPairs.forEach((pair, index) => {
-        cards.push({ value: pair.russian, pairId: index, type: 'russian' });
-        cards.push({ value: pair.portuguese, pairId: index, type: 'portuguese' });
-    });
-    cards = cards.sort(() => Math.random() - 0.5);
-    cards.forEach((item) => {
-        const card = document.createElement('div');
-        card.classList.add('memory-card');
-        card.dataset.pairId = item.pairId;
-        card.dataset.value = item.value;
-        card.innerText = '?';
-        card.addEventListener('click', flipCard);
-        gameContainer.appendChild(card);
-    });
 }
-
 let flippedCards = [];
-function flipCard() {
-    if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
-        this.classList.add('flipped');
-        this.innerText = this.dataset.value;
-        flippedCards.push(this);
+function flipCard(e) {
+    e.preventDefault(); // Previne zoom no mobile
+    const card = this;
+    if (flippedCards.length < 2 && !card.classList.contains('flipped') && !card.classList.contains('matched')) {
+        card.classList.add('flipped');
+        card.innerText = card.dataset.value;
+        flippedCards.push(card);
         if (flippedCards.length === 2) {
             setTimeout(checkMatch, 1000);
         }
     }
 }
-
 function checkMatch() {
     const [card1, card2] = flippedCards;
     if (card1.dataset.pairId === card2.dataset.pairId) {
@@ -558,103 +561,120 @@ function checkMatch() {
     }
     flippedCards = [];
     const matchedCount = document.querySelectorAll('.memory-card.matched').length;
-    if (matchedCount === document.querySelectorAll('.memory-card').length) {
+    const totalCards = document.querySelectorAll('.memory-card').length;
+    if (matchedCount === totalCards && totalCards > 0) {
         alert('Jogo de memória completado! +100 XP');
         addXP(100);
     }
 }
-
 // Pronunciation - Synced with vocabulary
 const pronunciationItems = vocabulary.map(item => ({
     russian: item.russian,
     portuguese: item.portuguese
 }));
-
 function loadPronunciationCards() {
     const container = document.getElementById('pronunciation-cards');
-    container.innerHTML = '';
-    pronunciationItems.forEach(item => {
-        const card = document.createElement('div');
-        card.classList.add('flashcard');
-        card.innerHTML = `
-            <div class="flashcard-inner">
-                <div class="flashcard-front">${item.russian}</div>
-                <div class="flashcard-back">${item.portuguese}</div>
-            </div>
-            <button onclick="playAudio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent(item.russian)}&tl=ru')">Ouvir</button>
-        `;
-        card.addEventListener('click', () => card.classList.toggle('flipped'));
-        container.appendChild(card);
-    });
+    if (container) {
+        container.innerHTML = '';
+        pronunciationItems.forEach(item => {
+            const card = document.createElement('div');
+            card.classList.add('flashcard');
+            card.innerHTML = `
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">${item.russian}</div>
+                    <div class="flashcard-back">${item.portuguese}</div>
+                </div>
+                <button class="audio-button" onclick="playAudio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent(item.russian)}&tl=ru')">Ouvir</button>
+            `;
+            card.addEventListener('click', () => card.classList.toggle('flipped'));
+            card.addEventListener('touchend', () => card.classList.toggle('flipped')); // Suporte mobile
+            container.appendChild(card);
+        });
+    }
 }
-
 // Pronunciation Quiz
 const pronunciationQuestions = vocabulary.slice(0, 20);
 let currentPronQuestion = 0;
-
 function startPronQuiz() {
     if (hearts === 0) {
-        document.getElementById('pron-quiz').innerHTML = '<p>Sem corações!</p>';
+        const pronQuizDiv = document.getElementById('pron-quiz');
+        if (pronQuizDiv) {
+            pronQuizDiv.innerHTML = '<p>Sem corações!</p>';
+        }
         return;
     }
     const quizDiv = document.getElementById('pron-quiz');
-    if (currentPronQuestion < pronunciationQuestions.length) {
-        const q = pronunciationQuestions[currentPronQuestion];
-        quizDiv.innerHTML = `
-            <button onclick="playAudio('${q.audio}')">Ouvir Áudio</button>
-            <input type="text" id="pron-input">
-            <button onclick="checkPronAnswer()">Verificar</button>
-        `;
-    } else {
-        quizDiv.innerHTML = '<p>Quiz completado! +50 XP</p>';
-        addXP(50);
-        currentPronQuestion = 0;
+    if (quizDiv) {
+        if (currentPronQuestion < pronunciationQuestions.length) {
+            const q = pronunciationQuestions[currentPronQuestion];
+            quizDiv.innerHTML = `
+                <button class="quiz-button audio-button" onclick="playAudio('${q.audio}')">Ouvir Áudio</button>
+                <input type="text" id="pron-input" class="quiz-input">
+                <button class="quiz-button" onclick="checkPronAnswer()">Verificar</button>
+            `;
+        } else {
+            quizDiv.innerHTML = '<p>Quiz completado! +50 XP</p>';
+            addXP(50);
+            currentPronQuestion = 0;
+        }
     }
 }
-
 function checkPronAnswer() {
     const q = pronunciationQuestions[currentPronQuestion];
-    const input = document.getElementById('pron-input').value.trim().toLowerCase();
-    if (input === q.russian.toLowerCase()) {
-        alert('Correto!');
-        addXP(10);
-    } else {
-        alert('Errado! Era ' + q.russian);
-        loseHeart();
+    const inputElement = document.getElementById('pron-input');
+    if (inputElement) {
+        const input = inputElement.value.trim().toLowerCase();
+        if (input === q.russian.toLowerCase()) {
+            alert('Correto!');
+            addXP(10);
+        } else {
+            alert('Errado! Era ' + q.russian);
+            loseHeart();
+        }
     }
     currentPronQuestion++;
     startPronQuiz();
 }
-
 // Word Matching Game
 function startMatchingGame() {
     if (hearts === 0) {
-        document.getElementById('matching-container').innerHTML = '<p>Sem corações!</p>';
+        const matchingContainerDiv = document.getElementById('matching-container');
+        if (matchingContainerDiv) {
+            matchingContainerDiv.innerHTML = '<p>Sem corações!</p>';
+        }
         return;
     }
     const container = document.getElementById('matching-container');
-    container.innerHTML = '';
-    const pairs = vocabulary.slice(0, 10);
-    let rusCards = pairs.map(p => p.russian).sort(() => Math.random() - 0.5);
-    let ptCards = pairs.map(p => p.portuguese).sort(() => Math.random() - 0.5);
-    const createCard = (value, type) => {
-        const card = document.createElement('div');
-        card.classList.add('matching-card');
-        card.innerText = value;
-        card.dataset.type = type;
-        card.dataset.value = value;
-        card.addEventListener('click', () => matchClick(card));
-        container.appendChild(card);
-    };
-    rusCards.forEach(r => createCard(r, 'rus'));
-    ptCards.forEach(p => createCard(p, 'pt'));
+    if (container) {
+        container.innerHTML = '';
+        const pairs = vocabulary.slice(0, 10);
+        let rusCards = pairs.map(p => p.russian).sort(() => Math.random() - 0.5);
+        let ptCards = pairs.map(p => p.portuguese).sort(() => Math.random() - 0.5);
+        const createCard = (value, type) => {
+            const card = document.createElement('div');
+            card.classList.add('matching-card');
+            card.innerText = value;
+            card.dataset.type = type;
+            card.dataset.value = value;
+            card.addEventListener('click', () => matchClick(card));
+            card.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                matchClick(card);
+            }); // Suporte mobile
+            container.appendChild(card);
+        };
+        rusCards.forEach(r => createCard(r, 'rus'));
+        ptCards.forEach(p => createCard(p, 'pt'));
+    }
 }
-
 let selectedMatch = null;
 function matchClick(card) {
     if (selectedMatch) {
-        if (vocabulary.find(v => v.russian === (card.dataset.type === 'rus' ? card.dataset.value : selectedMatch.dataset.value) &&
-                                 v.portuguese === (card.dataset.type === 'pt' ? card.dataset.value : selectedMatch.dataset.value))) {
+        const matchFound = vocabulary.some(v => 
+            (v.russian === (card.dataset.type === 'rus' ? card.dataset.value : selectedMatch.dataset.value)) &&
+            (v.portuguese === (card.dataset.type === 'pt' ? card.dataset.value : selectedMatch.dataset.value))
+        );
+        if (matchFound) {
             card.classList.add('matched');
             selectedMatch.classList.add('matched');
             addXP(15);
@@ -665,15 +685,14 @@ function matchClick(card) {
     } else {
         selectedMatch = card;
     }
-    if (document.querySelectorAll('.matching-card.matched').length === 20) {
+    const matchedCount = document.querySelectorAll('.matching-card.matched').length;
+    if (matchedCount === 20) {
         alert('Matching completado! +80 XP');
         addXP(80);
     }
 }
-
 // Leaderboard Simulation
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [{ name: 'Você', score: xp }];
-
 function updateLeaderboard() {
     leaderboard[0].score = xp;
     leaderboard.sort((a, b) => b.score - a.score);
@@ -683,3 +702,4 @@ function updateLeaderboard() {
         lbList.innerHTML = leaderboard.slice(0, 5).map(entry => `<li>${entry.name}: ${entry.score} XP</li>`).join('');
     }
 }
+```
