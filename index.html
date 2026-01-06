@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUTIRUS - App para Aprender Russo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>PUTIRUS</h1>
+        <p>Aprenda russo de forma divertida e interativa!</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><button onclick="showSection('home')">Home</button></li>
+            <li><button onclick="showSection('vocabulary')">Vocabulário</button></li>
+            <li><button onclick="showSection('grammar')">Gramática</button></li>
+            <li><button onclick="showSection('pronunciation')">Pronúncia</button></li>
+            <li><button onclick="showSection('conversation')">Conversação</button></li>
+            <li><button onclick="showSection('culture')">Cultura</button></li>
+            <li><button onclick="showSection('lessons')">Lições Interativas</button></li>
+            <li><button onclick="showSection('music')">Recomendações de Músicas</button></li>
+            <li><button onclick="showSection('podcasts')">Podcasts</button></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="home" class="active">
+            <h2>Bem-vindo ao PUTIRUS!</h2>
+            <p>Este app ajuda você a aprender russo com recursos divertidos e interativos.</p>
+            <div id="xp-system">
+                <h3>Seu Progresso</h3>
+                <p>XP: <span id="xp">0</span></p>
+                <p>Nível: <span id="level">1</span></p>
+            </div>
+        </section>
+
+        <section id="vocabulary" class="hidden">
+            <h2>Vocabulário</h2>
+            <p>Aprenda palavras e expressões comuns em russo.</p>
+            <div class="card-container">
+                <!-- Flashcards serão gerados via JS -->
+            </div>
+            <button onclick="loadVocabularyCards()">Carregar Cartas de Vocabulário</button>
+        </section>
+
+        <section id="grammar" class="hidden">
+            <h2>Gramática</h2>
+            <p>Regras de gramática russa com explicações e exemplos.</p>
+            <ul>
+                <li><strong>Casos Nominativo:</strong> Usado para sujeitos. Ex: Кот (Gato).</li>
+                <li><strong>Casos Genitivo:</strong> Para posse. Ex: Кота (Do gato).</li>
+                <!-- Mais exemplos extensos -->
+                <li><strong>Verbos no Presente:</strong> Я говорю (Eu falo).</li>
+                <li><strong>Verbos no Passado:</strong> Я говорил (Eu falei).</li>
+                <li><strong>Adjetivos:</strong> Concordam em gênero, número e caso. Ex: Красный дом (Casa vermelha).</li>
+                <li><strong>Pronomes:</strong> Я, Ты, Он, Она, Оно, Мы, Вы, Они.</li>
+                <li><strong>Preposições:</strong> В (em), На (em/sobre), С (com).</li>
+                <li><strong>Conjunções:</strong> И (e), Но (mas), Потому что (porque).</li>
+                <li><strong>Advérbios:</strong> Быстро (rapidamente), Хорошо (bem).</li>
+                <li><strong>Números:</strong> Один (um), Два (dois), Три (três).</li>
+            </ul>
+            <button onclick="grammarQuiz()">Quiz de Gramática</button>
+            <div id="grammar-quiz"></div>
+        </section>
+
+        <section id="pronunciation" class="hidden">
+            <h2>Pronúncia</h2>
+            <p>Áudio e vídeo para melhorar a pronúncia.</p>
+            <div>
+                <p>Olá: Привет</p>
+                <audio controls>
+                    <source src="https://example.com/audio/privet.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <div>
+                <p>Obrigado: Спасибо</p>
+                <audio controls>
+                    <source src="https://example.com/audio/spasibo.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <!-- Mais áudios extensos -->
+            <div>
+                <p>Sim: Да</p>
+                <audio controls>
+                    <source src="https://example.com/audio/da.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <div>
+                <p>Não: Нет</p>
+                <audio controls>
+                    <source src="https://example.com/audio/net.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <div>
+                <p>Por favor: Пожалуйста</p>
+                <audio controls>
+                    <source src="https://example.com/audio/pozhaluysta.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <!-- Vídeo exemplo -->
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/some-pronunciation-video" frameborder="0" allowfullscreen></iframe>
+        </section>
+
+        <section id="conversation" class="hidden">
+            <h2>Conversação</h2>
+            <p>Diálogos e exercícios.</p>
+            <div class="dialogue">
+                <p>Diálogo 1: Cumprimentar</p>
+                <p>- Привет! Как дела?</p>
+                <p>- Хорошо, спасибо! А у тебя?</p>
+            </div>
+            <!-- Mais diálogos extensos -->
+            <div class="dialogue">
+                <p>Diálogo 2: Compras</p>
+                <p>- Сколько стоит это?</p>
+                <p>- Сто рублей.</p>
+            </div>
+            <div class="dialogue">
+                <p>Diálogo 3: Restaurante</p>
+                <p>- Что вы хотите заказать?</p>
+                <p>- Борщ, пожалуйста.</p>
+            </div>
+            <button onclick="conversationExercise()">Exercício de Conversação</button>
+            <div id="conversation-exercise"></div>
+        </section>
+
+        <section id="culture" class="hidden">
+            <h2>Cultura</h2>
+            <p>Informações sobre a cultura e história russa.</p>
+            <p>A Rússia é o maior país do mundo, com uma rica história incluindo o Império Russo, a União Soviética e a Federação Russa moderna.</p>
+            <p>Festivais: Maslenitsa, Vitória Day.</p>
+            <!-- Conteúdo extenso -->
+            <p>Comida: Borscht, Pelmeni, Blini.</p>
+            <p>Literatura: Tolstoy, Dostoevsky.</p>
+            <p>Música: Tchaikovsky, Rachmaninoff.</p>
+            <p>Arte: Fabergé eggs, Matryoshka dolls.</p>
+            <p>História: Revolução de 1917, WWII.</p>
+            <p>Geografia: Sibéria, Volga River.</p>
+            <p>Esportes: Hockey, Figure Skating.</p>
+            <p>Tradições: Banya, Vodka toasts.</p>
+        </section>
+
+        <section id="lessons" class="hidden">
+            <h2>Lições Interativas</h2>
+            <p>Jogos, quizzes e exercícios.</p>
+            <button onclick="startQuiz()">Iniciar Quiz</button>
+            <div id="quiz-container"></div>
+            <button onclick="startGame()">Jogo de Memória</button>
+            <div id="game-container"></div>
+        </section>
+
+        <section id="music" class="hidden">
+            <h2>Recomendações de Músicas</h2>
+            <p>Ouça músicas russas para aprender.</p>
+            <div class="music-player">
+                <h3>ДДТ (DDT) - "Что такое осень"</h3>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/5KC-iscJtsI" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="music-player">
+                <h3>ДДТ (DDT) - "Последний герой"</h3>
+                <!-- Link não encontrado precisamente, usando placeholder de channel video -->
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/search-for-last-hero" frameborder="0" allowfullscreen></iframe>
+                <!-- Nota: Em produção, substitua por link real, ex: https://www.youtube.com/watch?v=someid -->
+            </div>
+            <div class="music-player">
+                <h3>Нэнси (Nensi) - "Ты далеко"</h3>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/-P2k2LRbgcU" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="music-player">
+                <h3>Нэнси (Nensi) - "Малиновый рассвет"</h3>
+                <!-- Link aproximado, ajuste se necessário -->
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/kEEAOaKQ7ms" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="music-player">
+                <h3>Viktor Tsoi - "Группа крови"</h3>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/xKpzH5bxYsk" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="music-player">
+                <h3>Zemfira - "Хочешь?"</h3>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/xpJ_fYyAeYk" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="podcasts" class="hidden">
+            <h2>Podcasts</h2>
+            <p>Recomendações de podcasts em russo.</p>
+            <div class="podcast-player">
+                <h3>Radio Sputnik</h3>
+                <p>Acesse: <a href="https://player.fm/podcasts/radio-sputnik" target="_blank">Player FM</a></p>
+                <!-- Embed se possível -->
+            </div>
+            <div class="podcast-player">
+                <h3>Moscow Times</h3>
+                <p>Acesse: <a href="https://www.themoscowtimes.com/podcasts" target="_blank">Moscow Times Podcasts</a></p>
+            </div>
+            <div class="podcast-player">
+                <h3>RussianPod101</h3>
+                <p>Acesse: <a href="https://www.russianpod101.com/" target="_blank">RussianPod101</a></p>
+                <iframe src="https://open.spotify.com/embed/show/2Y6Y4hrT7H0zeMxoJsTquN" width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+            <div class="podcast-player">
+                <h3>Learn Russian with RussianPod</h3>
+                <p>Acesse: <a href="https://www.russianpod101.com/" target="_blank">RussianPod</a></p>
+            </div>
+            <div class="podcast-player">
+                <h3>Cultura Russa</h3>
+                <p>Acesse: <a href="https://podcasts.apple.com/us/podcast/cultura-e-economia-russa/id1572478048" target="_blank">Apple Podcasts</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PUTIRUS. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
