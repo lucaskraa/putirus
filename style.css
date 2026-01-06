@@ -1,4 +1,4 @@
-
+```css
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
@@ -8,7 +8,6 @@ body {
     line-height: 1.6;
     overflow-x: hidden; /* Prevent horizontal scroll */
 }
-
 /* Header */
 header {
     background-color: #58cc02; /* Duolingo green */
@@ -19,19 +18,16 @@ header {
     position: relative;
     animation: fadeInDown 0.8s ease-out;
 }
-
 header h1 {
     margin: 0;
     font-size: 2.8em;
     font-weight: bold;
     letter-spacing: 1px;
 }
-
 header p {
     margin: 8px 0;
     font-size: 1.3em;
 }
-
 #streak {
     font-size: 1.1em;
     margin-top: 15px;
@@ -41,7 +37,21 @@ header p {
     display: inline-block;
     animation: pulseStreak 2s infinite;
 }
-
+/* Hearts fixed top right */
+#hearts {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    font-size: 1.8em;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
 /* Keyframes for Animations */
 @keyframes fadeInDown {
     from {
@@ -53,13 +63,11 @@ header p {
         transform: translateY(0);
     }
 }
-
 @keyframes pulseStreak {
     0% { transform: scale(1); }
     50% { transform: scale(1.08); }
     100% { transform: scale(1); }
 }
-
 @keyframes flipInY {
     from {
         transform: perspective(400px) rotateY(90deg);
@@ -70,7 +78,6 @@ header p {
         opacity: 1;
     }
 }
-
 @keyframes revealBack {
     from {
         opacity: 0;
@@ -81,13 +88,11 @@ header p {
         transform: scale(1);
     }
 }
-
 @keyframes hoverPulse {
     0% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
     50% { transform: scale(1.05); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
     100% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
 }
-
 /* Navigation */
 nav {
     background-color: white;
@@ -96,7 +101,6 @@ nav {
     top: 0;
     z-index: 1000;
 }
-
 nav ul {
     list-style: none;
     padding: 12px 0;
@@ -105,11 +109,9 @@ nav ul {
     justify-content: center;
     flex-wrap: wrap;
 }
-
 nav ul li {
     margin: 6px 12px;
 }
-
 nav ul li button {
     background-color: white;
     border: 2px solid #58cc02;
@@ -119,26 +121,23 @@ nav ul li button {
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+    touch-action: manipulation; /* Improve touch response */
 }
-
 nav ul li button:hover {
     background-color: #58cc02;
     color: white;
     transform: translateY(-3px);
     border-color: #4ab200;
 }
-
 nav ul li button:active {
     transform: translateY(0);
 }
-
 /* Main Content */
 main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 25px 15px;
 }
-
 section {
     max-width: 900px;
     margin: 25px auto;
@@ -149,19 +148,16 @@ section {
     transition: opacity 0.6s ease, transform 0.4s ease;
     animation: fadeInUp 0.6s ease-out;
 }
-
 section.hidden {
     display: none;
     opacity: 0;
     transform: translateY(30px);
 }
-
 section.active {
     display: block;
     opacity: 1;
     transform: translateY(0);
 }
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -172,7 +168,6 @@ section.active {
         transform: translateY(0);
     }
 }
-
 h2 {
     color: #58cc02;
     font-size: 2.2em;
@@ -180,7 +175,6 @@ h2 {
     text-align: center;
     letter-spacing: 0.5px;
 }
-
 /* XP System - Enhanced with animations */
 #xp-system {
     text-align: center;
@@ -191,13 +185,11 @@ h2 {
     margin-bottom: 25px;
     animation: pulse 2.5s infinite;
 }
-
 #xp-system h3 {
     margin: 0 0 12px;
     color: #58cc02;
     font-size: 1.5em;
 }
-
 .progress-bar {
     background-color: #e0e0e0;
     border-radius: 25px;
@@ -206,7 +198,6 @@ h2 {
     overflow: hidden;
     position: relative;
 }
-
 .progress-fill {
     background-color: #58cc02;
     height: 100%;
@@ -215,20 +206,10 @@ h2 {
     transition: width 0.6s ease-in-out;
     animation: progressGlow 2s infinite alternate;
 }
-
 @keyframes progressGlow {
     0% { box-shadow: 0 0 5px rgba(88, 204, 2, 0.5); }
     100% { box-shadow: 0 0 15px rgba(88, 204, 2, 1); }
 }
-
-#hearts {
-    font-size: 1.8em;
-    margin-top: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
 /* Flashcards - Enhanced with advanced animations: flipInY on load, reveal on back, pulse on hover */
 .card-container {
     display: flex;
@@ -237,7 +218,6 @@ h2 {
     gap: 20px;
     animation: fadeInUp 0.8s ease-out;
 }
-
 .flashcard {
     width: 240px;
     height: 160px;
@@ -246,17 +226,15 @@ h2 {
     transition: transform 0.4s ease;
     animation: flipInY 0.6s ease-out forwards;
     opacity: 0; /* Start hidden for animation */
+    touch-action: manipulation; /* Improve touch response */
 }
-
 .card-container .flashcard:nth-child(1) { animation-delay: 0.1s; }
 .card-container .flashcard:nth-child(2) { animation-delay: 0.2s; }
 .card-container .flashcard:nth-child(3) { animation-delay: 0.3s; }
 /* Add more delays for additional cards if needed */
-
 .flashcard:hover {
     animation: hoverPulse 1s infinite;
 }
-
 .flashcard-inner {
     position: relative;
     width: 100%;
@@ -266,11 +244,9 @@ h2 {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
 }
-
 .flashcard.flipped .flashcard-inner {
     transform: rotateY(180deg);
 }
-
 .flashcard-front, .flashcard-back {
     position: absolute;
     width: 100%;
@@ -286,20 +262,17 @@ h2 {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
-
 .flashcard-front {
     background-color: #ffffff;
     color: #333;
     border: 2px solid #ddd;
 }
-
 .flashcard-back {
     background-color: #58cc02;
     color: white;
     transform: rotateY(180deg);
     animation: revealBack 0.4s ease-out forwards;
 }
-
 /* Buttons - Improved hover and active states */
 button {
     background-color: #58cc02;
@@ -312,57 +285,69 @@ button {
     box-shadow: 0 5px 0 #4ab200;
     transition: all 0.2s ease;
     margin: 12px 0;
+    touch-action: manipulation; /* Improve touch response */
 }
-
 button:hover {
     background-color: #4ab200;
     transform: translateY(-3px);
     box-shadow: 0 7px 0 #3e9b00;
 }
-
 button:active {
     box-shadow: none;
     transform: translateY(5px);
 }
-
-/* Quiz Buttons - Added animations */
+/* Quiz Buttons - Added animations and mobile improvements */
+.quiz-question {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .quiz-button {
     background-color: white;
     border: 2px solid #58cc02;
     color: #58cc02;
-    margin: 8px;
     padding: 12px 24px;
     border-radius: 25px;
     transition: all 0.3s ease;
     animation: fadeInUp 0.5s ease-out;
+    touch-action: manipulation; /* Improve touch response */
+    font-size: 1.1em;
 }
-
 .quiz-button:hover {
     background-color: #58cc02;
     color: white;
     transform: scale(1.05);
 }
-
 .quiz-button.correct {
     background-color: #58cc02;
     color: white;
     border: none;
     animation: correctPulse 0.5s ease;
 }
-
 .quiz-button.incorrect {
     background-color: #ff4b4b;
     color: white;
     border: none;
     animation: shake 0.5s ease;
 }
-
+.quiz-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1.1em;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
 @keyframes correctPulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
-
 @keyframes shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
@@ -370,7 +355,6 @@ button:active {
     75% { transform: translateX(-5px); }
     100% { transform: translateX(0); }
 }
-
 /* Dialogues - Added hover animation */
 .dialogue {
     background-color: #f0f0f0;
@@ -380,12 +364,10 @@ button:active {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     transition: background-color 0.4s ease, transform 0.3s ease;
 }
-
 .dialogue:hover {
     background-color: #e0f7e9;
     transform: translateY(-5px);
 }
-
 /* Music and Podcast Players - Improved layout and hover */
 .music-player, .podcast-player {
     margin: 25px 0;
@@ -396,24 +378,22 @@ button:active {
     text-align: center;
     transition: box-shadow 0.4s ease, transform 0.3s ease;
 }
-
 .music-player:hover, .podcast-player:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
 }
-
 .music-player h3, .podcast-player h3 {
     color: #58cc02;
     margin-bottom: 15px;
     font-size: 1.4em;
 }
-
 iframe {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Make iframes responsive */
+    max-width: 560px;
 }
-
 /* Memory Game - Added flip animation */
 .memory-card {
     width: 140px;
@@ -430,12 +410,11 @@ iframe {
     font-weight: bold;
     transition: transform 0.4s ease, background-color 0.3s ease;
     perspective: 1000px;
+    touch-action: manipulation; /* Improve touch response */
 }
-
 .memory-card:hover {
     transform: scale(1.05);
 }
-
 .memory-card.flipped, .memory-card.matched {
     background-color: #58cc02;
     color: white;
@@ -443,13 +422,11 @@ iframe {
     transform: rotateY(180deg);
     transition: transform 0.6s ease;
 }
-
 /* Grammar List - Styled as accordion-like for better UX (if JS expanded) */
 #grammar ul {
     list-style-type: none;
     padding: 0;
 }
-
 #grammar li {
     background-color: #f0f0f0;
     padding: 15px;
@@ -457,28 +434,23 @@ iframe {
     border-radius: 10px;
     transition: background-color 0.3s ease;
 }
-
 #grammar li:hover {
     background-color: #e0f7e9;
 }
-
 /* Culture Section - Improved readability */
 #culture p {
     margin: 12px 0;
     font-size: 1.1em;
 }
-
 /* Phrases Section - Added for common phrases */
 #phrases ul {
     list-style-type: disc;
     padding-left: 20px;
 }
-
 #phrases li {
     margin: 10px 0;
     font-size: 1.1em;
 }
-
 /* Footer - Enhanced */
 footer {
     text-align: center;
@@ -491,54 +463,66 @@ footer {
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
     font-size: 1em;
 }
-
 /* Responsive Design - Improved for mobile */
 @media (max-width: 768px) {
     main {
         padding: 15px;
     }
-
     section {
         margin: 15px;
         padding: 20px;
     }
-
     .card-container {
         flex-direction: column;
         align-items: center;
     }
-
     .flashcard {
         width: 100%;
         max-width: 320px;
         height: 180px;
     }
-
     nav ul {
         flex-direction: column;
         padding: 10px;
     }
-
     nav ul li {
         margin: 8px 0;
     }
-
+    nav ul li button {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.2em;
+    }
+    .quiz-options {
+        gap: 15px;
+    }
+    .quiz-button {
+        width: 100%;
+        padding: 14px;
+        font-size: 1.2em;
+    }
+    .quiz-input {
+        font-size: 1.2em;
+        padding: 14px;
+    }
     .memory-card {
         width: 120px;
         height: 80px;
     }
+    #hearts {
+        font-size: 1.4em;
+        padding: 5px;
+    }
 }
-
 @media (max-width: 480px) {
     header h1 {
         font-size: 2.2em;
     }
-
     button {
         padding: 12px 20px;
+        font-size: 1.1em;
     }
 }
-
 /* Additional Styles for Potential App Expansions (e.g., Leaderboards, Daily Goals) */
 #leaderboard {
     margin-top: 20px;
@@ -546,7 +530,6 @@ footer {
     background-color: #f0f0f0;
     border-radius: 15px;
 }
-
 #daily-goal {
     text-align: center;
     margin: 20px 0;
@@ -554,10 +537,10 @@ footer {
     color: #58cc02;
     animation: pulse 2s infinite;
 }
-
 /* General Pulse Animation */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.03); }
     100% { transform: scale(1); }
 }
+```
