@@ -1,69 +1,159 @@
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f7f7f7;
     color: #333;
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
+/* Header */
 header {
-    background-color: #007bff;
+    background-color: #58cc02; /* Duolingo green */
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 25px 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    position: relative;
+    animation: fadeInDown 0.8s ease-out;
 }
 
-header:hover {
-    background-color: #0056b3;
+header h1 {
+    margin: 0;
+    font-size: 2.8em;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+header p {
+    margin: 8px 0;
+    font-size: 1.3em;
+}
+
+#streak {
+    font-size: 1.1em;
+    margin-top: 15px;
+    background-color: rgba(255, 255, 255, 0.25);
+    padding: 8px 15px;
+    border-radius: 25px;
+    display: inline-block;
+    animation: pulseStreak 2s infinite;
+}
+
+/* Keyframes for Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseStreak {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+@keyframes flipInY {
+    from {
+        transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes revealBack {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes hoverPulse {
+    0% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    50% { transform: scale(1.05); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+    100% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+}
+
+/* Navigation */
+nav {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 nav ul {
     list-style: none;
-    padding: 0;
+    padding: 12px 0;
+    margin: 0;
     display: flex;
     justify-content: center;
-    background-color: #333;
-    margin: 0;
+    flex-wrap: wrap;
 }
 
 nav ul li {
-    margin: 0 10px;
+    margin: 6px 12px;
 }
 
 nav ul li button {
-    background: none;
-    border: none;
-    color: white;
-    padding: 10px 20px;
+    background-color: white;
+    border: 2px solid #58cc02;
+    color: #58cc02;
+    padding: 12px 24px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
 }
 
 nav ul li button:hover {
-    background-color: #555;
-    transform: scale(1.05);
+    background-color: #58cc02;
+    color: white;
+    transform: translateY(-3px);
+    border-color: #4ab200;
 }
 
+nav ul li button:active {
+    transform: translateY(0);
+}
+
+/* Main Content */
 main {
-    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 25px 15px;
 }
 
 section {
-    margin-bottom: 40px;
-    padding: 20px;
+    max-width: 900px;
+    margin: 25px auto;
+    padding: 25px;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: opacity 0.5s ease, transform 0.3s;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.6s ease, transform 0.4s ease;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 section.hidden {
     display: none;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
 }
 
 section.active {
@@ -72,29 +162,109 @@ section.active {
     transform: translateY(0);
 }
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2 {
+    color: #58cc02;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* XP System - Enhanced with animations */
+#xp-system {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+    animation: pulse 2.5s infinite;
+}
+
+#xp-system h3 {
+    margin: 0 0 12px;
+    color: #58cc02;
+    font-size: 1.5em;
+}
+
+.progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 25px;
+    height: 25px;
+    margin: 12px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    background-color: #58cc02;
+    height: 100%;
+    border-radius: 25px;
+    width: 0%;
+    transition: width 0.6s ease-in-out;
+    animation: progressGlow 2s infinite alternate;
+}
+
+@keyframes progressGlow {
+    0% { box-shadow: 0 0 5px rgba(88, 204, 2, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(88, 204, 2, 1); }
+}
+
+#hearts {
+    font-size: 1.8em;
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Flashcards - Enhanced with advanced animations: flipInY on load, reveal on back, pulse on hover */
 .card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 20px;
+    animation: fadeInUp 0.8s ease-out;
 }
 
 .flashcard {
-    width: 200px;
-    height: 300px;
-    margin: 10px;
-    perspective: 1000px;
+    width: 240px;
+    height: 160px;
+    perspective: 1200px;
     cursor: pointer;
+    transition: transform 0.4s ease;
+    animation: flipInY 0.6s ease-out forwards;
+    opacity: 0; /* Start hidden for animation */
+}
+
+.card-container .flashcard:nth-child(1) { animation-delay: 0.1s; }
+.card-container .flashcard:nth-child(2) { animation-delay: 0.2s; }
+.card-container .flashcard:nth-child(3) { animation-delay: 0.3s; }
+/* Add more delays for additional cards if needed */
+
+.flashcard:hover {
+    animation: hoverPulse 1s infinite;
 }
 
 .flashcard-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    text-align: center;
-    transition: transform 0.6s;
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Smooth flip */
     transform-style: preserve-3d;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
 }
 
 .flashcard.flipped .flashcard-inner {
@@ -109,89 +279,285 @@ section.active {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 25px;
     box-sizing: border-box;
-    border-radius: 8px;
+    border-radius: 15px;
+    font-size: 1.3em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 .flashcard-front {
-    background-color: #bbb;
-    color: black;
+    background-color: #ffffff;
+    color: #333;
+    border: 2px solid #ddd;
 }
 
 .flashcard-back {
-    background-color: #2980b9;
+    background-color: #58cc02;
     color: white;
     transform: rotateY(180deg);
+    animation: revealBack 0.4s ease-out forwards;
 }
 
-.music-player, .podcast-player {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    transition: box-shadow 0.3s;
-}
-
-.music-player:hover, .podcast-player:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
+/* Buttons - Improved hover and active states */
 button {
-    background-color: #28a745;
+    background-color: #58cc02;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 14px 28px;
+    border-radius: 28px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+    box-shadow: 0 5px 0 #4ab200;
+    transition: all 0.2s ease;
+    margin: 12px 0;
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #4ab200;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 0 #3e9b00;
+}
+
+button:active {
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+/* Quiz Buttons - Added animations */
+.quiz-button {
+    background-color: white;
+    border: 2px solid #58cc02;
+    color: #58cc02;
+    margin: 8px;
+    padding: 12px 24px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.quiz-button:hover {
+    background-color: #58cc02;
+    color: white;
     transform: scale(1.05);
 }
 
-#xp-system {
-    background-color: #ffc107;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    animation: pulse 2s infinite;
+.quiz-button.correct {
+    background-color: #58cc02;
+    color: white;
+    border: none;
+    animation: correctPulse 0.5s ease;
 }
 
-@keyframes pulse {
+.quiz-button.incorrect {
+    background-color: #ff4b4b;
+    color: white;
+    border: none;
+    animation: shake 0.5s ease;
+}
+
+@keyframes correctPulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
 
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Dialogues - Added hover animation */
 .dialogue {
-    background-color: #e9ecef;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-left: 5px solid #007bff;
-    transition: background-color 0.3s;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.4s ease, transform 0.3s ease;
 }
 
 .dialogue:hover {
-    background-color: #d4edda;
+    background-color: #e0f7e9;
+    transform: translateY(-5px);
 }
 
-#quiz-container, #game-container, #grammar-quiz, #conversation-exercise {
-    margin-top: 20px;
+/* Music and Podcast Players - Improved layout and hover */
+.music-player, .podcast-player {
+    margin: 25px 0;
     padding: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: box-shadow 0.4s ease, transform 0.3s ease;
 }
 
+.music-player:hover, .podcast-player:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.music-player h3, .podcast-player h3 {
+    color: #58cc02;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+iframe {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Memory Game - Added flip animation */
+.memory-card {
+    width: 140px;
+    height: 90px;
+    margin: 12px;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: transform 0.4s ease, background-color 0.3s ease;
+    perspective: 1000px;
+}
+
+.memory-card:hover {
+    transform: scale(1.05);
+}
+
+.memory-card.flipped, .memory-card.matched {
+    background-color: #58cc02;
+    color: white;
+    border: none;
+    transform: rotateY(180deg);
+    transition: transform 0.6s ease;
+}
+
+/* Grammar List - Styled as accordion-like for better UX (if JS expanded) */
+#grammar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#grammar li {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin: 8px 0;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#grammar li:hover {
+    background-color: #e0f7e9;
+}
+
+/* Culture Section - Improved readability */
+#culture p {
+    margin: 12px 0;
+    font-size: 1.1em;
+}
+
+/* Phrases Section - Added for common phrases */
+#phrases ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+#phrases li {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+/* Footer - Enhanced */
 footer {
     text-align: center;
-    padding: 10px;
-    background-color: #333;
+    padding: 20px;
+    background-color: #58cc02;
     color: white;
-    position: fixed;
-    width: 100%;
+    position: relative;
     bottom: 0;
+    width: 100%;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+}
+
+/* Responsive Design - Improved for mobile */
+@media (max-width: 768px) {
+    main {
+        padding: 15px;
+    }
+
+    section {
+        margin: 15px;
+        padding: 20px;
+    }
+
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .flashcard {
+        width: 100%;
+        max-width: 320px;
+        height: 180px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    nav ul li {
+        margin: 8px 0;
+    }
+
+    .memory-card {
+        width: 120px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 2.2em;
+    }
+
+    button {
+        padding: 12px 20px;
+    }
+}
+
+/* Additional Styles for Potential App Expansions (e.g., Leaderboards, Daily Goals) */
+#leaderboard {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+}
+
+#daily-goal {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.2em;
+    color: #58cc02;
+    animation: pulse 2s infinite;
+}
+
+/* General Pulse Animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
 }
