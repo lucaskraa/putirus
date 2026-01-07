@@ -1,4 +1,3 @@
-```javascript
 // XP System
 let xp = parseInt(localStorage.getItem('xp')) || 0;
 let level = parseInt(localStorage.getItem('level')) || 1;
@@ -26,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDailyGoal();
     setInterval(refillHearts, 60000); // Check every minute
 
-    // Navegação com hash para parecer páginas diferentes (mobile/PC)
-    const initialSection = location.hash.slice(1) || 'home'; // Mude 'home' para sua seção padrão se necessário
+    // Navegação com hash para parecer páginas diferentes
+    const initialSection = location.hash.slice(1) || 'home';
     showSection(initialSection);
 
     window.addEventListener('popstate', () => {
@@ -305,7 +304,6 @@ function loadVocabularyCards() {
                 <button class="audio-button" onclick="playAudio('${item.audio}')">Ouvir</button>
             `;
             card.addEventListener('click', () => card.classList.toggle('flipped'));
-            card.addEventListener('touchend', () => card.classList.toggle('flipped')); // Suporte mobile
             container.appendChild(card);
         });
     }
@@ -575,7 +573,6 @@ function startGame() {
             card.dataset.value = item.value;
             card.innerText = '?';
             card.addEventListener('click', flipCard);
-            card.addEventListener('touchend', flipCard); // Suporte mobile
             gameContainer.appendChild(card);
         });
     }
@@ -584,7 +581,6 @@ function startGame() {
 let flippedCards = [];
 
 function flipCard(e) {
-    e.preventDefault(); // Previne zoom no mobile
     const card = this;
     if (flippedCards.length < 2 && !card.classList.contains('flipped') && !card.classList.contains('matched')) {
         card.classList.add('flipped');
@@ -634,7 +630,6 @@ function loadPronunciationCards() {
                 <button class="audio-button" onclick="playAudio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent(item.russian)}&tl=ru')">Ouvir</button>
             `;
             card.addEventListener('click', () => card.classList.toggle('flipped'));
-            card.addEventListener('touchend', () => card.classList.toggle('flipped')); // Suporte mobile
             container.appendChild(card);
         });
     }
@@ -705,10 +700,6 @@ function startMatchingGame() {
             card.dataset.type = type;
             card.dataset.value = value;
             card.addEventListener('click', () => matchClick(card));
-            card.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                matchClick(card);
-            }); // Suporte mobile
             container.appendChild(card);
         };
         rusCards.forEach(r => createCard(r, 'rus'));
@@ -754,4 +745,3 @@ function updateLeaderboard() {
         lbList.innerHTML = leaderboard.slice(0, 5).map(entry => `<li>${entry.name}: ${entry.score} XP</li>`).join('');
     }
 }
-```
