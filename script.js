@@ -2,17 +2,21 @@
 // XP System
 let xp = parseInt(localStorage.getItem('xp')) || 0;
 let level = parseInt(localStorage.getItem('level')) || 1;
+
 // Hearts System
 let hearts = parseInt(localStorage.getItem('hearts')) || 5;
 const maxHearts = 5;
 let lastHeartRefillTime = parseInt(localStorage.getItem('lastHeartRefillTime')) || Date.now();
+
 // Streak System
 let streak = parseInt(localStorage.getItem('streak')) || 0;
 let lastLoginDate = localStorage.getItem('lastLoginDate') || new Date().toDateString();
+
 // Daily Goal
 const dailyGoalXP = 50;
 let dailyXP = parseInt(localStorage.getItem('dailyXP')) || 0;
 let dailyGoalAchieved = localStorage.getItem('dailyGoalDate') === new Date().toDateString();
+
 document.addEventListener('DOMContentLoaded', () => {
     checkStreak();
     refillHearts(); // Check and refill on load
@@ -21,7 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStreak();
     updateDailyGoal();
     setInterval(refillHearts, 60000); // Check every minute
+
+    // Navegação com hash para parecer páginas diferentes (mobile/PC)
+    const initialSection = location.hash.slice(1) || 'home'; // Mude 'home' para sua seção padrão se necessário
+    showSection(initialSection);
+
+    window.addEventListener('popstate', () => {
+        const section = location.hash.slice(1) || 'home';
+        showSection(section);
+    });
 });
+
 function checkStreak() {
     const today = new Date().toDateString();
     if (lastLoginDate !== today) {
@@ -38,9 +52,14 @@ function checkStreak() {
         resetDailyGoal();
     }
 }
+
 function updateStreak() {
-    document.getElementById('streak').innerText = `Streak: ${streak} dias`;
+    const streakElement = document.getElementById('streak');
+    if (streakElement) {
+        streakElement.innerText = `Streak: ${streak} dias`;
+    }
 }
+
 function resetDailyGoal() {
     dailyXP = 0;
     dailyGoalAchieved = false;
@@ -48,6 +67,7 @@ function resetDailyGoal() {
     localStorage.setItem('dailyGoalDate', new Date().toDateString());
     updateDailyGoal();
 }
+
 function updateDailyGoal() {
     const dailyGoalDiv = document.getElementById('daily-goal');
     if (dailyGoalDiv) {
@@ -57,14 +77,21 @@ function updateDailyGoal() {
         }
     }
 }
+
 function updateProgress() {
-    document.getElementById('xp').innerText = xp;
-    document.getElementById('level').innerText = level;
-    const progress = (xp % (level * 100)) / (level * 100) * 100;
-    document.getElementById('progress-fill').style.width = `${progress}%`;
+    const xpElement = document.getElementById('xp');
+    const levelElement = document.getElementById('level');
+    const progressFill = document.getElementById('progress-fill');
+    if (xpElement) xpElement.innerText = xp;
+    if (levelElement) levelElement.innerText = level;
+    if (progressFill) {
+        const progress = (xp % (level * 100)) / (level * 100) * 100;
+        progressFill.style.width = `${progress}%`;
+    }
     localStorage.setItem('xp', xp);
     localStorage.setItem('level', level);
 }
+
 function addXP(amount) {
     xp += amount;
     dailyXP += amount;
@@ -82,6 +109,7 @@ function addXP(amount) {
     updateDailyGoal();
     updateLeaderboard();
 }
+
 function updateHearts() {
     const heartsElement = document.getElementById('hearts');
     if (heartsElement) {
@@ -89,6 +117,7 @@ function updateHearts() {
     }
     localStorage.setItem('hearts', hearts);
 }
+
 function loseHeart() {
     if (hearts > 0) {
         hearts--;
@@ -101,6 +130,7 @@ function loseHeart() {
         return false;
     }
 }
+
 function refillHearts() {
     const now = Date.now();
     const timeDiff = Math.floor((now - lastHeartRefillTime) / (1000 * 60 * 30)); // 30 min per heart
@@ -111,7 +141,8 @@ function refillHearts() {
         updateHearts();
     }
 }
-// Navigation
+
+// Navigation with hash for page-like feel
 function showSection(sectionId) {
     document.querySelectorAll('main section').forEach(section => {
         section.classList.add('hidden');
@@ -122,6 +153,7 @@ function showSection(sectionId) {
         targetSection.classList.remove('hidden');
         targetSection.classList.add('active');
     }
+    history.pushState(null, '', '#' + sectionId);
     // Init section-specific content
     if (sectionId === 'vocabulary') loadVocabularyCards();
     if (sectionId === 'grammar') grammarQuiz();
@@ -129,7 +161,8 @@ function showSection(sectionId) {
     if (sectionId === 'conversation') conversationExercise();
     if (sectionId === 'lessons') { startQuiz(); startGame(); startMatchingGame(); }
 }
-// Expanded Vocabulary - 100 words from reliable source
+
+// Expanded Vocabulary - with corrected audio URLs
 const vocabulary = [
     { russian: 'я', portuguese: 'eu', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D1%8F&tl=ru' },
     { russian: 'ты', portuguese: 'tu', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D1%82%D1%8B&tl=ru' },
@@ -256,6 +289,7 @@ const vocabulary = [
     { russian: 'Аэропорт', portuguese: 'Aeroporto', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D0%90%D1%8D%D1%80%D0%BE%D0%BF%D0%BE%D1%80%D1%82&tl=ru' },
     { russian: 'Поезд', portuguese: 'Trem', audio: 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=%D0%9F%D0%BE%D0%B5%D0%B7%D0%B4&tl=ru' },
 ];
+
 function loadVocabularyCards() {
     const container = document.querySelector('#vocabulary .card-container');
     if (container) {
@@ -276,10 +310,12 @@ function loadVocabularyCards() {
         });
     }
 }
+
 function playAudio(url) {
     const audio = new Audio(url);
     audio.play().catch(error => console.error('Audio play error:', error));
 }
+
 // Expanded Grammar Quiz - 30 questions based on beginner rules
 const grammarQuestions = [
     { question: 'Qual é o caso usado para sujeitos?', options: ['Nominativo', 'Genitivo', 'Dativo', 'Acusativo'], correct: 0 },
@@ -314,7 +350,9 @@ const grammarQuestions = [
     { question: 'Conjunção para "ou"?', options: ['И', 'Но', 'Или', 'Потому что'], correct: 2 },
     { question: 'Advérbio para "bem"?', options: ['Хорошо', 'Плохо', 'Быстро', 'Здесь'], correct: 0 },
 ];
+
 let currentGrammarQuestion = 0;
+
 function grammarQuiz() {
     if (hearts === 0) {
         const grammarQuizDiv = document.getElementById('grammar-quiz');
@@ -341,6 +379,7 @@ function grammarQuiz() {
         }
     }
 }
+
 function checkGrammarAnswer(selected) {
     const q = grammarQuestions[currentGrammarQuestion];
     if (selected === q.correct) {
@@ -353,6 +392,7 @@ function checkGrammarAnswer(selected) {
     currentGrammarQuestion++;
     grammarQuiz();
 }
+
 // Expanded Conversation Exercise - 20+ from daily phrases
 const conversationExercises = [
     { prompt: 'Como se diz "Olá, como vai?"', answer: 'Привет, как дела?' },
@@ -378,7 +418,9 @@ const conversationExercises = [
     { prompt: 'Diga "Tem cuidado"', answer: 'Береги себя' },
     { prompt: 'Diga "Não te preocupes"', answer: 'Не переживай' },
 ];
+
 let currentConversationExercise = 0;
+
 function conversationExercise() {
     if (hearts === 0) {
         const conversationExerciseDiv = document.getElementById('conversation-exercise');
@@ -404,22 +446,21 @@ function conversationExercise() {
         }
     }
 }
+
 function checkConversationAnswer() {
     const ex = conversationExercises[currentConversationExercise];
-    const inputElement = document.getElementById('conv-input');
-    if (inputElement) {
-        const input = inputElement.value.trim().toLowerCase();
-        if (input === ex.answer.toLowerCase()) {
-            alert('Correto!');
-            addXP(10);
-        } else {
-            alert('Errado! A resposta correta é ' + ex.answer);
-            loseHeart();
-        }
+    const input = document.getElementById('conv-input').value.trim().toLowerCase();
+    if (input === ex.answer.toLowerCase()) {
+        alert('Correto!');
+        addXP(10);
+    } else {
+        alert('Errado! A resposta correta é ' + ex.answer);
+        loseHeart();
     }
     currentConversationExercise++;
     conversationExercise();
 }
+
 // Expanded Lessons Quiz - 30 questions based on vocabulary translations
 const lessonsQuestions = [
     { question: 'Tradução de "Olá"?', options: ['Пока', 'Привет', 'Спасибо', 'Да'], correct: 1 },
@@ -453,12 +494,14 @@ const lessonsQuestions = [
     { question: 'Qual é "tudo" em russo?', options: ['или', 'всё', 'и', 'знать'], correct: 1 },
     { question: 'Tradução de "ou"?', options: ['и', 'или', 'знать', 'Я знаю'], correct: 1 },
 ];
+
 let currentLessonQuestion = 0;
+
 function startQuiz() {
     if (hearts === 0) {
-        const quizContainerDiv = document.getElementById('quiz-container');
-        if (quizContainerDiv) {
-            quizContainerDiv.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        const quizContainer = document.getElementById('quiz-container');
+        if (quizContainer) {
+            quizContainer.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
         }
         return;
     }
@@ -480,6 +523,7 @@ function startQuiz() {
         }
     }
 }
+
 function checkLessonAnswer(selected) {
     const q = lessonsQuestions[currentLessonQuestion];
     if (selected === q.correct) {
@@ -492,13 +536,15 @@ function checkLessonAnswer(selected) {
     currentLessonQuestion++;
     startQuiz();
 }
+
 // Improved Memory Game
 let memoryDifficulty = 'medium';
+
 function startGame() {
     if (hearts === 0) {
-        const gameContainerDiv = document.getElementById('game-container');
-        if (gameContainerDiv) {
-            gameContainerDiv.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) {
+            gameContainer.innerHTML = '<p>Sem corações! Recarregue para tentar novamente.</p>';
         }
         return;
     }
@@ -510,6 +556,7 @@ function startGame() {
             case 'easy': pairCount = 10; break;
             case 'medium': pairCount = 20; break;
             case 'hard': pairCount = 30; break;
+            default: pairCount = 20;
         }
         const memoryPairs = vocabulary.slice(0, pairCount).map(item => ({
             russian: item.russian,
@@ -533,7 +580,9 @@ function startGame() {
         });
     }
 }
+
 let flippedCards = [];
+
 function flipCard(e) {
     e.preventDefault(); // Previne zoom no mobile
     const card = this;
@@ -546,6 +595,7 @@ function flipCard(e) {
         }
     }
 }
+
 function checkMatch() {
     const [card1, card2] = flippedCards;
     if (card1.dataset.pairId === card2.dataset.pairId) {
@@ -567,16 +617,13 @@ function checkMatch() {
         addXP(100);
     }
 }
+
 // Pronunciation - Synced with vocabulary
-const pronunciationItems = vocabulary.map(item => ({
-    russian: item.russian,
-    portuguese: item.portuguese
-}));
 function loadPronunciationCards() {
     const container = document.getElementById('pronunciation-cards');
     if (container) {
         container.innerHTML = '';
-        pronunciationItems.forEach(item => {
+        vocabulary.forEach(item => {
             const card = document.createElement('div');
             card.classList.add('flashcard');
             card.innerHTML = `
@@ -592,14 +639,16 @@ function loadPronunciationCards() {
         });
     }
 }
+
 // Pronunciation Quiz
 const pronunciationQuestions = vocabulary.slice(0, 20);
 let currentPronQuestion = 0;
+
 function startPronQuiz() {
     if (hearts === 0) {
-        const pronQuizDiv = document.getElementById('pron-quiz');
-        if (pronQuizDiv) {
-            pronQuizDiv.innerHTML = '<p>Sem corações!</p>';
+        const pronQuiz = document.getElementById('pron-quiz');
+        if (pronQuiz) {
+            pronQuiz.innerHTML = '<p>Sem corações!</p>';
         }
         return;
     }
@@ -619,28 +668,27 @@ function startPronQuiz() {
         }
     }
 }
+
 function checkPronAnswer() {
     const q = pronunciationQuestions[currentPronQuestion];
-    const inputElement = document.getElementById('pron-input');
-    if (inputElement) {
-        const input = inputElement.value.trim().toLowerCase();
-        if (input === q.russian.toLowerCase()) {
-            alert('Correto!');
-            addXP(10);
-        } else {
-            alert('Errado! Era ' + q.russian);
-            loseHeart();
-        }
+    const input = document.getElementById('pron-input').value.trim().toLowerCase();
+    if (input === q.russian.toLowerCase()) {
+        alert('Correto!');
+        addXP(10);
+    } else {
+        alert('Errado! Era ' + q.russian);
+        loseHeart();
     }
     currentPronQuestion++;
     startPronQuiz();
 }
+
 // Word Matching Game
 function startMatchingGame() {
     if (hearts === 0) {
-        const matchingContainerDiv = document.getElementById('matching-container');
-        if (matchingContainerDiv) {
-            matchingContainerDiv.innerHTML = '<p>Sem corações!</p>';
+        const matchingContainer = document.getElementById('matching-container');
+        if (matchingContainer) {
+            matchingContainer.innerHTML = '<p>Sem corações!</p>';
         }
         return;
     }
@@ -667,10 +715,12 @@ function startMatchingGame() {
         ptCards.forEach(p => createCard(p, 'pt'));
     }
 }
+
 let selectedMatch = null;
+
 function matchClick(card) {
     if (selectedMatch) {
-        const matchFound = vocabulary.some(v => 
+        const matchFound = vocabulary.some(v =>
             (v.russian === (card.dataset.type === 'rus' ? card.dataset.value : selectedMatch.dataset.value)) &&
             (v.portuguese === (card.dataset.type === 'pt' ? card.dataset.value : selectedMatch.dataset.value))
         );
@@ -691,8 +741,10 @@ function matchClick(card) {
         addXP(80);
     }
 }
+
 // Leaderboard Simulation
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [{ name: 'Você', score: xp }];
+
 function updateLeaderboard() {
     leaderboard[0].score = xp;
     leaderboard.sort((a, b) => b.score - a.score);
