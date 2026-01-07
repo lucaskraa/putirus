@@ -1,1 +1,425 @@
-
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUTIRUS - App para Aprender Russo</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos otimizados para PC */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        header {
+            position: relative;
+            padding: 10px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        #hearts {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+        }
+        nav li {
+            margin: 5px;
+        }
+        nav button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        main section {
+            padding: 20px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 10px 0;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .flashcard {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+        .quiz-options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PUTIRUS</h1>
+        <p>Aprenda russo de forma divertida e interativa!</p>
+        <div id="streak">Streak: 0 dias</div>
+        <div id="hearts" aria-label="Corações restantes">❤️❤️❤️❤️❤️</div>
+    </header>
+    <nav aria-label="Navegação principal">
+        <ul>
+            <li><button onclick="showSection('home')">Home</button></li>
+            <li><button onclick="showSection('vocabulary')">Vocabulário</button></li>
+            <li><button onclick="showSection('grammar')">Gramática</button></li>
+            <li><button onclick="showSection('pronunciation')">Pronúncia</button></li>
+            <li><button onclick="showSection('conversation')">Conversação</button></li>
+            <li><button onclick="showSection('culture')">Cultura</button></li>
+            <li><button onclick="showSection('lessons')">Lições Interativas</button></li>
+            <li><button onclick="showSection('music')">Recomendações de Músicas</button></li>
+            <li><button onclick="showSection('podcasts')">Podcasts</button></li>
+            <li><button onclick="showSection('phrases')">Frases Comuns</button></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="home" class="active" aria-labelledby="home-title">
+            <h2 id="home-title">Bem-vindo ao PUTIRUS!</h2>
+            <p>Este app ajuda você a aprender russo com recursos divertidos e interativos, inspirado no Duolingo.</p>
+            <div id="xp-system">
+                <h3>Seu Progresso</h3>
+                <p>XP: <span id="xp">0</span></p>
+                <p>Nível: <span id="level">1</span></p>
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+        </section>
+        <section id="vocabulary" class="hidden" aria-labelledby="vocabulary-title">
+            <h2 id="vocabulary-title">Vocabulário</h2>
+            <p>Aprenda palavras e expressões comuns em russo com flashcards interativos.</p>
+            <div class="card-container">
+                <!-- Flashcards gerados via JS -->
+            </div>
+            <button onclick="loadVocabularyCards()">Carregar Cartas de Vocabulário</button>
+        </section>
+        <section id="grammar" class="hidden" aria-labelledby="grammar-title">
+            <h2 id="grammar-title">Gramática</h2>
+            <p>Regras de gramática russa com explicações e exemplos.</p>
+            <ul>
+                <li><strong>Casos Nominativo:</strong> Usado para sujeitos. Ex: Кот (Gato).</li>
+                <li><strong>Casos Genitivo:</strong> Para posse. Ex: Кота (Do gato).</li>
+                <li><strong>Casos Dativo:</strong> Para objeto indireto. Ex: Коту (Para o gato).</li>
+                <li><strong>Casos Acusativo:</strong> Para objeto direto. Ex: Кота (Gato, como objeto).</li>
+                <li><strong>Casos Instrumental:</strong> Para instrumento. Ex: Котом (Com o gato).</li>
+                <li><strong>Casos Preposicional:</strong> Para localização. Ex: О коте (Sobre o gato).</li>
+                <li><strong>Verbos no Presente:</strong> Я говорю (Eu falo), Ты говоришь (Você fala).</li>
+                <li><strong>Verbos no Passado:</strong> Я говорил (Eu falei, masc.), Я говорила (Eu falei, fem.).</li>
+                <li><strong>Verbos no Futuro:</strong> Я буду говорить (Eu falarei).</li>
+                <li><strong>Adjetivos:</strong> Concordam em gênero, número e caso. Ex: Красный дом (Casa vermelha), Красная книга (Livro vermelho).</li>
+                <li><strong>Pronomes:</strong> Я (Eu), Ты (Você), Он (Ele), Она (Ela), Оно (Isso), Мы (Nós), Вы (Vocês), Они (Eles).</li>
+                <li><strong>Preposições:</strong> В (em), На (em/sobre), С (com), К (para), Из (de).</li>
+                <li><strong>Conjunções:</strong> И (e), Но (mas), Потому что (porque), Или (ou).</li>
+                <li><strong>Advérbios:</strong> Быстро (rapidamente), Хорошо (bem), Плохо (mal), Здесь (aqui).</li>
+                <li><strong>Números:</strong> Один (um), Два (dois), Три (três), Четыре (quatro), Пять (cinco).</li>
+                <li><strong>Aspectos Verbais:</strong> Imperfeito (falar repetidamente) vs. Perfeito (falar uma vez).</li>
+                <li><strong>Possessivos:</strong> Мой (meu, masc.), Моя (minha, fem.).</li>
+            </ul>
+            <button onclick="grammarQuiz()">Quiz de Gramática</button>
+            <div id="grammar-quiz"></div>
+        </section>
+        <section id="pronunciation" class="hidden" aria-labelledby="pronunciation-title">
+            <h2 id="pronunciation-title">Pronúncia</h2>
+            <p>Áudio e vídeo para melhorar a pronúncia. Clique para ouvir.</p>
+            <div class="card-container" id="pronunciation-cards">
+                <!-- Áudios gerados via JS -->
+            </div>
+            <button onclick="loadPronunciationCards()">Carregar Exemplos de Pronúncia</button>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/53XD6UFe0cw" title="Vídeo de pronúncia em russo" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+        <section id="conversation" class="hidden" aria-labelledby="conversation-title">
+            <h2 id="conversation-title">Conversação</h2>
+            <p>Diálogos e exercícios para praticar.</p>
+            <div class="dialogue">
+                <p>Diálogo 1: Cumprimentar</p>
+                <p>- Привет! Как дела?</p>
+                <p>- Хорошо, спасибо! А у тебя?</p>
+            </div>
+            <div class="dialogue">
+                <p>Diálogo 2: Compras</p>
+                <p>- Сколько стоит это?</p>
+                <p>- Сто рублей.</p>
+            </div>
+            <div class="dialogue">
+                <p>Diálogo 3: Restaurante</p>
+                <p>- Что вы хотите заказать?</p>
+                <p>- Борщ, пожалуйста.</p>
+            </div>
+            <div class="dialogue">
+                <p>Diálogo 4: Perguntar Direções</p>
+                <p>- Извините, где метро?</p>
+                <p>- Прямо и направо.</p>
+            </div>
+            <div class="dialogue">
+                <p>Diálogo 5: Família</p>
+                <p>- У тебя есть брат?</p>
+                <p>- Да, у меня есть сестра.</p>
+            </div>
+            <button onclick="conversationExercise()">Exercício de Conversação</button>
+            <div id="conversation-exercise"></div>
+        </section>
+        <section id="culture" class="hidden" aria-labelledby="culture-title">
+            <h2 id="culture-title">Cultura</h2>
+            <p>Informações sobre a cultura e história russa.</p>
+            <p>A Rússia é o maior país do mundo, com uma rica história incluindo o Império Russo, a União Soviética e a Federação Russa moderna.</p>
+            <p>Festivais: Maslenitsa (semana da panqueca), Victory Day (9 de maio), New Year (principal feriado).</p>
+            <p>Comida: Borscht (sopa de beterraba), Pelmeni (pastéis recheados), Blini (panquecas), Caviar, Kvass.</p>
+            <p>Literatura: Leo Tolstoy (Guerra e Paz), Fyodor Dostoevsky (Crime e Castigo), Alexander Pushkin (poeta nacional).</p>
+            <p>Música: Pyotr Tchaikovsky (balés), Sergei Rachmaninoff (compositores clássicos), rock moderno como Kino.</p>
+            <p>Arte: Ovos Fabergé, Bonecas Matryoshka, Ícones religiosos, Pinturas de Kandinsky.</p>
+            <p>História: Revolução de 1917, Segunda Guerra Mundial (Grande Guerra Patriótica), Perestroika.</p>
+            <p>Geografia: Sibéria (região vasta), Rio Volga (mais longo da Europa), Lago Baikal (mais profundo do mundo).</p>
+            <p>Esportes: Hockey no gelo, Patinação artística, Xadrez, Futebol.</p>
+            <p>Tradições: Banya (sauna russa), Brindes com Vodka, Chá com samovar, Superstições como não apertar mãos na porta.</p>
+            <p>Cidades Famosas: Moscou (Kremlin, Praça Vermelha), São Petersburgo (Hermitage, canais), Kazan (mistura cultural).</p>
+            <p>Feriados: Dia da Mulher (8 de março), Dia da Rússia (12 de junho).</p>
+        </section>
+        <section id="lessons" class="hidden" aria-labelledby="lessons-title">
+            <h2 id="lessons-title">Lições Interativas</h2>
+            <p>Jogos, quizzes e exercícios para reforçar o aprendizado.</p>
+            <button onclick="startQuiz()">Iniciar Quiz Geral</button>
+            <div id="quiz-container"></div>
+            <button onclick="startGame()">Jogo de Memória</button>
+            <div id="game-container"></div>
+        </section>
+        <section id="music" class="hidden" aria-labelledby="music-title">
+            <h2 id="music-title">Recomendações de Músicas</h2>
+            <p>Ouça músicas russas para aprender e se divertir.</p>
+            <div class="music-player">
+                <h3>ДДТ (DDT) - "Что такое осень"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/5KC-iscJtsI" title="Música Что такое осень de DDT" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>КИНО - "Последний герой"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/F_0iPf7mL_I" title="Música Последний герой de KINO" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>Нэнси (Nensi) - "Ты далеко"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/-P2k2LRbgcU" title="Música Ты далеко de Nensi" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>Эндшпиль - "Малиновый рассвет"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/kEEAOaKQ7ms" title="Música Малиновый рассвет de Эндшпиль" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>Viktor Tsoi (КИНО) - "Группа крови"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/xKpzH5bxYsk" title="Música Группа крови de Viktor Tsoi (KINO)" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>Zemfira - "Хочешь?"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/xpJ_fYyAeYk" title="Música Хочешь? de Zemfira" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>КИНО - "Звезда по имени солнце"</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/6J_7G4w5q3g" title="Música Звезда по имени солнце de KINO" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>Калинка</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/2KCf_4YOnjU" title="Música Калинка" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="music-player">
+                <h3>Катюша</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/bQR5xNvhgUg" title="Música Катюша" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+        <section id="podcasts" class="hidden" aria-labelledby="podcasts-title">
+            <h2 id="podcasts-title">Podcasts</h2>
+            <p>Recomendações de podcasts em russo para praticar a escuta.</p>
+            <div class="podcast-player">
+                <h3>Radio Sputnik</h3>
+                <p>Acesse: <a href="https://player.fm/podcasts/radio-sputnik" target="_blank" rel="noopener noreferrer">Player FM</a></p>
+            </div>
+            <div class="podcast-player">
+                <h3>Moscow Times</h3>
+                <p>Acesse: <a href="https://www.themoscowtimes.com/podcasts" target="_blank" rel="noopener noreferrer">Moscow Times Podcasts</a></p>
+            </div>
+            <div class="podcast-player">
+                <h3>RussianPod101</h3>
+                <p>Acesse: <a href="https://www.russianpod101.com/" target="_blank" rel="noopener noreferrer">RussianPod101</a></p>
+                <div class="video-container">
+                    <iframe src="https://open.spotify.com/embed/show/2Y6Y4hrT7H0zeMxoJsTquN" width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media" title="Podcast RussianPod101"></iframe>
+                </div>
+            </div>
+            <div class="podcast-player">
+                <h3>Slow Russian</h3>
+                <p>Acesse: <a href="https://realrussianclub.com/slowrussianpodcast/" target="_blank" rel="noopener noreferrer">Slow Russian Podcast</a></p>
+            </div>
+            <div class="podcast-player">
+                <h3>Russian with Max</h3>
+                <p>Acesse: <a href="https://www.russianwithmax.com/" target="_blank" rel="noopener noreferrer">Russian with Max</a></p>
+            </div>
+            <div class="podcast-player">
+                <h3>Arzamas</h3>
+                <p>Acesse: <a href="https://arzamas.academy/" target="_blank" rel="noopener noreferrer">Arzamas</a></p>
+            </div>
+        </section>
+        <section id="phrases" class="hidden" aria-labelledby="phrases-title">
+            <h2 id="phrases-title">Frases Comuns</h2>
+            <p>Frases úteis para o dia a dia.</p>
+            <ul>
+                <li>Как вас зовут? (Qual é o seu nome?)</li>
+                <li>Меня зовут... (Meu nome é...)</li>
+                <li>Откуда вы? (De onde você é?)</li>
+                <li>Я из Бразилии. (Eu sou do Brasil.)</li>
+                <li>Сколько времени? (Que horas são?)</li>
+                <li>Я не понимаю. (Eu não entendo.)</li>
+                <li>Говорите медленнее, пожалуйста. (Fale mais devagar, por favor.)</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 PUTIRUS. Todos os direitos reservados.</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // Script inline otimizado para PC
+        const pronunciationItems = [
+            { russian: 'Привет', portuguese: 'Olá' },
+            { russian: 'Спасибо', portuguese: 'Obrigado' },
+            { russian: 'Да', portuguese: 'Sim' },
+            { russian: 'Нет', portuguese: 'Não' },
+            { russian: 'Пожалуйста', portuguese: 'Por favor' },
+        ];
+        function loadPronunciationCards() {
+            const container = document.getElementById('pronunciation-cards');
+            container.innerHTML = '';
+            pronunciationItems.forEach(item => {
+                const card = document.createElement('div');
+                card.classList.add('flashcard');
+                card.innerHTML = `
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">${item.russian}</div>
+                        <div class="flashcard-back">${item.portuguese}</div>
+                    </div>
+                    <button onclick="playAudio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q=${encodeURIComponent(item.russian)}&tl=ru')">Ouvir</button>
+                `;
+                card.addEventListener('click', () => card.classList.toggle('flipped'));
+                container.appendChild(card);
+            });
+        }
+        function playAudio(url) {
+            const audio = new Audio(url);
+            audio.play().catch(error => console.error('Audio play error:', error));
+        }
+        function updateProgress() {
+            document.getElementById('xp').innerText = xp;
+            document.getElementById('level').innerText = level;
+            const progress = (xp % (level * 100)) / (level * 100) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            localStorage.setItem('xp', xp);
+            localStorage.setItem('level', level);
+        }
+        function grammarQuiz() {
+            const quizDiv = document.getElementById('grammar-quiz');
+            quizDiv.innerHTML = `
+                <div class="quiz-question">
+                    <p>Qual é o caso usado para sujeitos?</p>
+                    <div class="quiz-options">
+                        <button onclick="checkAnswer('Nominativo', true)">Nominativo</button>
+                        <button onclick="checkAnswer('Genitivo', false)">Genitivo</button>
+                        <button onclick="checkAnswer('Dativo', false)">Dativo</button>
+                    </div>
+                </div>
+            `;
+        }
+        function checkAnswer(answer, isCorrect) {
+            if (isCorrect) {
+                alert('Correto!');
+            } else {
+                alert('Errado! Tente novamente.');
+            }
+        }
+    </script>
+</body>
+</html>
+```
